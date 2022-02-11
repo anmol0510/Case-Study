@@ -1,0 +1,165 @@
+package Example;
+abstract class item{
+    private int idno;
+    private String title;
+    private int numPage;
+    abstract void In(int idno,String title,int numPage);
+}
+
+
+abstract class WrittenItem extends item   //writtenitem
+{
+    String author;
+    abstract void auth(String author);
+}
+
+
+class Book extends WrittenItem           //book
+{
+    
+
+    void In(int idno,String title,int numPage)
+    {
+        System.out.println("B id :"+idno);
+        System.out.println("B Title :"+title);
+        System.out.println("B No of Copies :"+numPage);
+        
+    }
+    void auth(String author)
+    {
+        System.out.println("B Author :"+author);
+    }
+
+}
+class JournalPaper extends WrittenItem
+{
+    private int Year;
+    void In(int idno,String title,int numPage)
+    {
+        System.out.println("J id :"+idno);
+        System.out.println("J title :"+title);
+        System.out.println("J no of pages :"+numPage);
+        
+    }
+    void auth(String author)
+    {
+        System.out.println("J Author :"+author);
+    }
+    void year(int Year)
+    {
+        this.Year=Year;
+    }
+    void getyear()
+    {
+        System.out.println("J Year :"+Year);
+    }
+
+    
+
+}
+
+abstract class MediaItem extends item  //mediaitem
+{
+    int runtime;
+    abstract void runtime (int runtime);
+
+}
+
+class Video extends MediaItem   //video
+{
+    private String Dir; 
+    private int  Yor;
+    private String Genre;
+
+    void In(int idno,String title,int numPage)
+    {
+        System.out.println("V id :"+idno);
+        System.out.println("V Title :"+title);
+        System.out.println("V No of Copies :"+numPage);
+        
+    }
+    void runtime (int runtime)
+    {
+        System.out.println("Video Runtime :"+runtime);
+    }
+    void Vide(String Dir,String Genre,int  Yor)
+    {
+        this.Dir=Dir;
+        this.Genre=Genre;
+        this.Yor=Yor;
+    }
+    void getvideodetail()
+    {
+        System.out.println("Director Video :"+Dir);
+        System.out.println("Genere Video :"+Genre);
+        System.out.println("Release Year Video :"+Yor);
+    }
+
+}
+
+class CD extends MediaItem  //CD
+
+{
+    private String artist;
+    private String genre;
+    void In(int idno,String title,int numPage)
+    {
+        System.out.println("CD id :"+idno);
+        System.out.println("CD Title :"+title);
+        System.out.println("CD No of copies :"+numPage);
+        
+    }
+    void runtime (int runtime)
+    {
+        System.out.println("CD Runtime :"+runtime);
+    }
+    void CDE(String artist ,String genre)
+    {
+        this.artist=artist;
+        this.genre=genre;
+        
+    }
+    void getcddetail()
+    {
+        System.out.println("CD_ARTIST:"+artist);
+        System.out.println("CD_Gnere :"+genre);
+        
+    }
+
+}
+
+
+public class Library              //library
+{
+    public static void main(String[] args) 
+    {
+        Book B=new Book();
+        System.out.println("Book Details:");
+        	
+        	B.auth("AK");
+        	B.In(1, "ak", 7);
+        
+        JournalPaper J=new JournalPaper();
+        System.out.println("Journal Details :");
+        
+        	J.auth("JK");
+        	J.In(2, "bk", 9);
+        	J.year(5);
+        	J.getyear();
+        
+        Video V=new Video();
+        System.out.println("Video Details :");
+        
+        	V.runtime(10);
+        	V.In(4, "VK", 7);
+        	V.Vide("ck", "dk", 1992);
+        	V.getvideodetail();
+        
+        CD C=new CD();
+        System.out.println("CD Details :");
+        
+        	C.runtime(3);
+        	C.In(10,"YK", 10);
+        	C.CDE("xk", "yk");
+        	C.getcddetail();
+    }
