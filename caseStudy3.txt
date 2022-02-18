@@ -1,0 +1,258 @@
+18/02/2022-
+==========
+package CaseStudy3;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+
+
+public class Product {
+private int id;
+private String name; 
+private int amount;
+private int code; 
+private String addrs;
+private int pincode;
+
+
+
+public int getId() {
+	return id;
+}
+
+
+public void setId(int id) {
+	this.id = id;
+}
+
+
+public String getName() {
+	return name;
+}
+
+
+public void setName(String name) {
+	this.name = name;
+}
+
+
+public int getAmount() {
+	return amount;
+}
+
+
+public void setAmount(int amount) {
+	this.amount = amount;
+}
+
+
+public int getCode() {
+	return code;
+}
+
+
+public void setCode(int code) {
+	this.code = code;
+}
+
+
+public String getAddrs() {
+	return addrs;
+}
+
+
+public void setAddrs(String addrs) {
+	this.addrs = addrs;
+}
+
+
+public int getPincode() {
+	return pincode;
+}
+
+
+public void setPincode(int pincode) {
+	this.pincode = pincode;
+}
+
+
+public static HashMap<Integer, Product> getDatabase() {
+	return database;
+}
+
+
+public static void setDatabase(HashMap<Integer, Product> database) {
+	Product.database = database;
+}
+
+
+public Product(int id,String name,int amount,int code,String addrs,int pincode) {
+	this.id=id;
+	this.name=name;
+	this.amount=amount;
+	this.code=code;
+	this.addrs=addrs;
+	this.pincode=pincode;
+}
+
+
+public Product() {
+	
+}
+
+
+@Override
+public String toString() {
+	return "Product [id=" + id + ", name=" + name + ", amount=" + amount + ", code=" + code + ", addrs=" + addrs
+			+ ", pincode=" + pincode + ", database=" + database + "]";
+}
+
+
+static HashMap<Integer,Product> database=new HashMap<>();
+
+public static void addProduct(Product product) {
+	database.put(product.id, product);
+}
+
+public static void updateProduct(int id) {
+    Product pd=new Product();
+    pd=database.get(id);
+    System.out.println("1.Name"+"/n");
+    System.out.println("2.Amount"+"/n");
+    System.out.println("3.Code"+"/n");
+    System.out.println("4.Address"+"/n");
+    System.out.println("5.Pincode");
+    
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter input:");
+    int update=sc.nextInt();
+    if(update==1) {
+    	Scanner sc1 = new Scanner(System.in);
+    	System.out.println("Enter name:");
+    	pd.name=sc1.nextLine();
+    	}
+    else if(update==2){
+    	Scanner sc2 = new Scanner(System.in);
+    	System.out.println("Enter Amount:");
+    	pd.name=sc2.nextLine();
+    }
+    else if(update==3){
+    	Scanner sc3 = new Scanner(System.in);
+    	System.out.println("Enter Code:");
+    	pd.name=sc3.nextLine();
+    }
+    else if(update==4){
+    	Scanner sc4 = new Scanner(System.in);
+    	System.out.println("Enter Address:");
+    	pd.name=sc4.nextLine();
+    }
+    else if(update==5){
+    	Scanner sc5 = new Scanner(System.in);
+    	System.out.println("Enter Pincode:");
+    	pd.name=sc5.nextLine();
+    }
+    else {
+    	System.out.println("Undefined Value");
+    }
+} 
+
+public static void deleteProduct(int id) {
+	database.remove(id);
+	System.out.println("Product deleted successfully");
+}
+
+
+public static void getProduct(int id) {
+	System.out.println(database.get(id).toString());
+}
+
+public static void getAllProducts() {
+	for(int i : database.keySet()) {
+		System.out.println(database.get(i).toString());
+	}
+}
+public static void main(String[] args) {
+	System.out.println("Enter 1 to continue : ");
+	Scanner sc = new Scanner(System.in);
+	int c = sc.nextInt();
+	while(c == 1) {
+		System.out.println("1. Add Product"+ 
+		                   "2. Update Product"+ 
+				           "3. Delete Product"+
+				           "4. Get Product"+ 
+				           "5. Get All Product" );
+		System.out.println("Enter numeric value : ");
+		int x = sc.nextInt();
+		
+		if(x==1){
+		
+			System.out.println("Enter details : ");
+			int id;
+			String name; 
+			int ammount; 
+			int code; 
+			String address; 
+			int pincode;
+			
+			System.out.println("Enter the id of product : ");
+			id = sc.nextInt();
+			System.out.println("Enter product name : ");
+			name = sc.next();
+			System.out.println("Enter ammount of product : ");
+			ammount = sc.nextInt();
+			System.out.println("Enter product code : ");
+			code = sc.nextInt();
+			System.out.println("Enter address : ");
+			address = sc.next();
+			System.out.println("Enter pin code : ");
+			pincode = sc.nextInt();
+			
+			Product myProduct = new Product(id, name, ammount, code, address, pincode);
+			addProduct(myProduct);
+			System.out.println("Product added Successfully...");
+			System.out.println("Enter 1 to continue : ");
+			c = sc.nextInt();
+		}
+		else if(x==2){
+			System.out.println("Enter Product id to update : ");
+			int updateId = sc.nextInt();
+			updateProduct(updateId);
+			System.out.println("Product updated successfully...");
+			System.out.println("Enter 1 to continue : ");
+			c = sc.nextInt();
+			
+		}
+		else if(x==3){
+			System.out.println("Enter Product id to delete : ");
+			int deleteId = sc.nextInt();
+			deleteProduct(deleteId);
+			System.out.println("Enter 1 to continue : ");
+			c = sc.nextInt();
+			
+		}
+		else if(x==4){
+			System.out.println("Enter Product id to get Product : ");
+			int getId = sc.nextInt();
+			getProduct(getId);
+			System.out.println("Enter 1 to continue : ");
+			c = sc.nextInt();
+			
+		}
+		else if(x==5){
+			getAllProducts();
+			System.out.println("Enter 1 to continue : ");
+			c = sc.nextInt();
+			
+		}
+		else {
+			System.out.println("Unexpected value: " + x);
+		}
+	}
+	sc.close();
+	
+}
+
+
+
+}
