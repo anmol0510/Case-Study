@@ -1,0 +1,318 @@
+25-03-2022-
+===========
+Mobile Management-
+==================
+com.mobile-
+===========
+-CaseStudy6MobileManagementApplication.java-
+--------------------------------------------
+package com.mobile;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CaseStudy6MobileManagementApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CaseStudy6MobileManagementApplication.class, args);
+	}
+
+}
+
+
+com.mobile.controller-
+======================
+-MobileController.java-
+-----------------------
+package com.mobile.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mobile.entity.Mobile;
+import com.mobile.service.MobileService;
+
+@RestController
+@RequestMapping("/mobile")          //http://localhost:7976/mobile
+public class MobileController {
+	@Autowired
+	MobileService service;
+	
+	
+	//Add-->Post,Update-->Put,Delete-->delete,Get-->get,GetAll-->get
+	
+	
+	@PostMapping("/addMobile")      //http://localhost:7976/mobile/addMobile
+	public Mobile addMobile(@RequestBody Mobile m) {
+		
+		return service.addMobile(m);
+}
+	
+	@PutMapping("/updateMobile")      //http://localhost:7976/mobile/updateMobile
+	public Mobile updateMobile(@RequestBody Mobile m) {
+		
+		return service.updateMobile(m);
+}
+	
+	@GetMapping("/getMobile/{mid}")   //http://localhost:7976/mobile/getMobile/mid
+	public Optional<Mobile> getMobile(@PathVariable("mid") int mobileId){
+		return service.getMobile(mobileId);
+		
+	}
+	
+	@GetMapping("/getAllMobiles")   //http://localhost:7976/mobile/getAllMobiles
+	public Iterable<Mobile> getAllMobiles(){
+		return service.getAllMobiles();
+		
+	}
+	
+	@DeleteMapping("/deleteMobile/{mid}")   //http://localhost:7976/mobile/deleteMobile/mid
+	public void deleteMobile(@PathVariable("mid") int mobileId){
+		service.deleteMobile(mobileId);
+		
+	}
+}
+
+
+com.mobile.dao-
+===============
+-MobileDao.java-
+----------------
+package com.mobile.dao;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.mobile.entity.Mobile;
+
+public interface MobileDao extends CrudRepository<Mobile, Integer>  {
+	//CrudRepository contains CRUD operations :Create ,Read,Update,Delete
+}
+
+com.mobile.entity-
+==================
+-Mobile.java-
+-------------
+package com.mobile.entity;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="MobileManagement")
+public class Mobile {
+	@Id
+	private int mobileId;
+	private String mobileName;
+	private String mobileType;
+	private int mobilePrice;
+	private String mobileWarranty;
+	private int mobileIMEINumber;
+	public int getMobileId() {           //getters and setters
+		return mobileId;
+	}
+	public void setMobileId(int mobileId) {
+		this.mobileId = mobileId;
+	}
+	public String getMobileName() {
+		return mobileName;
+	}
+	public void setMobileName(String mobileName) {
+		this.mobileName = mobileName;
+	}
+	public String getMobileType() {
+		return mobileType;
+	}
+	public void setMobileType(String mobileType) {
+		this.mobileType = mobileType;
+	}
+	public int getMobilePrice() {
+		return mobilePrice;
+	}
+	public void setMobilePrice(int mobilePrice) {
+		this.mobilePrice = mobilePrice;
+	}
+	public String getMobileWarranty() {
+		return mobileWarranty;
+	}
+	public void setMobileWarranty(String mobileWarranty) {
+		this.mobileWarranty = mobileWarranty;
+	}
+	public int getMobileIMEINumber() {
+		return mobileIMEINumber;
+	}
+	public void setMobileIMEINumber(int mobileIMEINumber) {
+		this.mobileIMEINumber = mobileIMEINumber;
+	}
+	@Override                             //toString method
+	public String toString() {
+		return "Mobile [mobileId=" + mobileId + ", mobileName=" + mobileName + ", mobileType=" + mobileType
+				+ ", mobilePrice=" + mobilePrice + ", mobileWarranty=" + mobileWarranty + ", mobileIMEINumber="
+				+ mobileIMEINumber + "]";
+	}
+	public Mobile(int mobileId, String mobileName, String mobileType, int mobilePrice, String mobileWarranty,
+			int mobileIMEINumber) {        //constructor using fields
+		super();
+		this.mobileId = mobileId;
+		this.mobileName = mobileName;
+		this.mobileType = mobileType;
+		this.mobilePrice = mobilePrice;
+		this.mobileWarranty = mobileWarranty;
+		this.mobileIMEINumber = mobileIMEINumber;
+	}
+	
+	public Mobile() {                       //Default Constructor
+		// TODO Auto-generated constructor stub
+	}
+}
+
+
+com.mobile.service-
+===================
+-MobileService.java-
+--------------------
+package com.mobile.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.mobile.entity.Mobile;
+
+public interface MobileService {
+		Mobile addMobile(Mobile mobile);               //add method
+		Mobile updateMobile(Mobile mobile);            //update method
+		void deleteMobile(int mobileId);               //delete method
+		Optional<Mobile> getMobile(int mobileId);      //get method
+		Iterable<Mobile> getAllMobiles();              //get all method
+}
+
+-MobileServiceImpl.java-
+------------------------
+package com.mobile.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mobile.dao.MobileDao;
+import com.mobile.entity.Mobile;
+
+@Service
+@Transactional
+public class MobileServiceImpl implements MobileService{
+	@Autowired
+	MobileDao dao;
+	@Override
+	public Mobile addMobile(Mobile mobile) {       //add--->save
+		// TODO Auto-generated method stub
+		return dao.save(mobile);
+	}
+
+	@Override
+	public Mobile updateMobile(Mobile mobile) {    //update--->save
+		// TODO Auto-generated method stub
+		return dao.save(mobile);
+	}
+
+	@Override
+	public void deleteMobile(int mobileId) {       //delete--->deleteById
+		// TODO Auto-generated method stub
+		 dao.deleteById(mobileId);;
+	}
+
+	@Override
+	public Optional<Mobile> getMobile(int mobileId) {     //get--->findById
+		// TODO Auto-generated method stub
+		return dao.findById(mobileId);
+	}
+
+	@Override
+	public Iterable<Mobile> getAllMobiles() {      //getAll--->findAll
+		// TODO Auto-generated method stub
+		return dao.findAll();
+	}
+		
+}
+
+
+applications.properties-
+=======================
+server.port=7976
+spring.datasource.url=jdbc:postgresql://localhost:5432/one
+spring.datasource.username=postgres
+spring.datasource.password=12345@
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+
+Output-
+========
+one=# select * from mobile_management;
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+(0 rows)
+
+
+one=# select * from mobile_management;                                                             //insert values
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+(1 row)
+
+
+one=# select * from mobile_management;
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+         2 |          6716187 | Note10      |        62000 | Android     | 3Year
+(2 rows)
+
+
+one=# select * from mobile_management;
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+         2 |          6716187 | Note10      |        62000 | Android     | 3Year
+         3 |          7525623 | Vivo        |        26550 | Android     | 1Year
+(3 rows)
+
+
+one=# select * from mobile_management;
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+         2 |          6716187 | Note10      |        62000 | Android     | 3Year
+         3 |          7525623 | Vivo        |        26550 | Android     | 1Year
+(3 rows)
+
+                     
+one=# select * from mobile_management;                                                                  //updateValue
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+         2 |          6716187 | Note10      |        62000 | Android     | 3Year
+         3 |          1839584 | OnePlus     |        37000 | Android     | 2Year
+(3 rows)
+
+
+one=# select * from mobile_management;                                                                  //delete value
+ mobile_id | mobileimeinumber | mobile_name | mobile_price | mobile_type | mobile_warranty
+-----------+------------------+-------------+--------------+-------------+-----------------
+         1 |          9274625 | Apple       |        75699 | IOS         | 2Year
+         3 |          1839584 | OnePlus     |        37000 | Android     | 2Year
+(2 rows)
